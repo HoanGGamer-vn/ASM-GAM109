@@ -1,0 +1,7 @@
+[BẢNG XẾP HẠNG ĐIỂM TRUNG BÌNH THEO VÙNG]
+Vùng: JS | Điểm trung bình: 1500.00
+Vùng: VN | Điểm trung bình: 1200.00
+Vùng: VN1 | Điểm trung bình: 800.00
+Vùng: VS | Điểm trung bình: 600.00
+Vùng: VN2 | Điểm trung bình: 300.00
+Vùng: VN | Điểm trung bình: 130.00

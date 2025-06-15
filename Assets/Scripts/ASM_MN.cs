@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
@@ -6,11 +6,20 @@ using System.IO;
 using System.Threading;
 using Unity.VisualScripting;
 using System;
+using System.Text.RegularExpressions;
 
 public class ASM_MN : Singleton<ASM_MN>
 {
     public List<Region> listRegion = new List<Region>();
-    public List<Players> listPlayer = new List<Players>();
+    public List<Players> listPlayer = new List<Players>
+    {
+        new Players(1, "Nguyen Van A", 1200, new Region(0, "VN")),
+        new Players(2, "Tran Thi B", 800, new Region(1, "VN1")),
+        new Players(3, "Le Van C", 300, new Region(2, "VN2")),
+        new Players(4, "Pham Thi D", 1500, new Region(3, "JS")),
+        new Players(5, "Hoang Van E", 600, new Region(4, "VS"))
+    };
+
 
     private void Start()
     {
@@ -121,7 +130,7 @@ public class ASM_MN : Singleton<ASM_MN>
                 })
                 .OrderByDescending(r => r.AverageScore);
 
-            string path = Path.Combine(Application.persistentDataPath, "bxhRegion.txt");
+            string path = Path.Combine(Application.dataPath, "bxhRegion.txt");
 
             using (StreamWriter writer = new StreamWriter(path, false))
             {
@@ -140,10 +149,16 @@ public class ASM_MN : Singleton<ASM_MN>
     }
     void CalculateAndSaveAverageScoreByRegion()
     {
-        var regionScores = listPlayer.GroupBy(p => p.Region).Select(g => new
+        var regionScores = listPlayer
+        .GroupBy(p => p.Region.ID)
+        .Select(group =>
         {
-            RegionName = g.Key.Name,
-            AverageScore = g.Average(p => p.Score)
+            var region = listRegion.FirstOrDefault(r => r.ID == group.Key)?.Name ?? "Unknown Region";
+            return new
+            {
+                RegionName = group.Key,
+                AverageScore = group.Average(p => p.Score)
+            };
         })
         .OrderByDescending(r => r.AverageScore);
         string path = Path.Combine(Application.persistentDataPath, "bxhRegion.txt");
@@ -157,7 +172,6 @@ public class ASM_MN : Singleton<ASM_MN>
         }
         Debug.Log($"[BXH] Đã ghi xong bảng xếp hạng vào tập tin: {path}");
     }
-
 }
 
 [SerializeField]
